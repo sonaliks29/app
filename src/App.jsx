@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from "@chatscope/chat-ui-kit-react";
 import './App.css';  // Ensure you import the CSS file
+import { firestore } from "./firebase";
+import { addDoc, collection } from "@firebase/firestore";
 
 const API_KEY = "";
 
 function App() {
   const [typing, setTyping] = useState(false);
+  const ref = collection(firestore, "messages");
+
   const [messages, setMessages] = useState([
     {
       message: "Hello, I am a chatbot",
@@ -22,16 +26,17 @@ function App() {
       direction: "outgoing"
     };
 
-    const newMessages = [...messages, newMessage];
-
     // Update our messages state
-    setMessages(newMessages);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+    // Save the user's message to Firestore immediately
+    //await addDoc(ref, { question: message });
 
     // Typing indicator
     setTyping(true);
 
     // Process message to ChatGPT
-    await processMessageToChatGPT(newMessages);
+    await processMessageToChatGPT([...messages, newMessage]);
   };
 
   async function processMessageToChatGPT(chatMessages) {
@@ -64,16 +69,21 @@ function App() {
       body: JSON.stringify(apiRequestBody)
     })
     .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      setMessages([
-        ...chatMessages,
-        {
-          message: data.choices[0].message.content,
-          sender: "ChatGPT",
-          direction: "incoming"
-        }
-      ]);
+    .then(async (data) => {
+      const botMessage = {
+        message: data.choices[0].message.content,
+        sender: "ChatGPT",
+        direction: "incoming"
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+
+      // Save the ChatGPT's response to Firestore immediately
+      await addDoc(ref, {
+        question: chatMessages[chatMessages.length - 1].message,
+        answer: data.choices[0].message.content
+      });
+
       setTyping(false);
     })
     .catch((error) => {
