@@ -1,16 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from "@chatscope/chat-ui-kit-react";
 import './App.css';  // Ensure you import the CSS file
-import { firestore } from "./firebase";
-import { addDoc, collection } from "@firebase/firestore";
 
-const API_KEY = "";
+const API_KEY = "sk-None-1O4aPZynUpZx3PatdZGpT3BlbkFJZh9JiTOpgoIYRKTEjZIA";
 
 function App() {
   const [typing, setTyping] = useState(false);
-  const ref = collection(firestore, "messages");
-
   const [messages, setMessages] = useState([
     {
       message: "Hello, I am a chatbot",
@@ -29,9 +25,6 @@ function App() {
     // Update our messages state
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
-    // Save the user's message to Firestore immediately
-    //await addDoc(ref, { question: message });
-
     // Typing indicator
     setTyping(true);
 
@@ -45,8 +38,6 @@ function App() {
       return { role: role, content: messageObject.message };
     });
 
-    // Role: user - message from user, assistant - response from ChatGPT
-    // System: how we want ChatGPT to talk
     const systemMessage = {
       role: "system",
       content: "Explain like a professional"
@@ -78,10 +69,16 @@ function App() {
 
       setMessages((prevMessages) => [...prevMessages, botMessage]);
 
-      // Save the ChatGPT's response to Firestore immediately
-      await addDoc(ref, {
-        question: chatMessages[chatMessages.length - 1].message,
-        answer: data.choices[0].message.content
+      // Save the ChatGPT's response to Firestore using the cloud function
+      await fetch('https://us-central1-rex-chatbot-6d89d.cloudfunctions.net/addMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: chatMessages[chatMessages.length - 1].message,
+          answer: data.choices[0].message.content,
+        }),
       });
 
       setTyping(false);
