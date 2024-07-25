@@ -1,42 +1,71 @@
 # React + Vite
 
-ReactChatGPTChatbot
-Welcome to the ReactChatGPTChatbot project! This is a simple chat application built with React that integrates with the ChatGPT API (gpt-3.5-turbo) to provide an interactive chatbot experience.
+Rex Chatbot
+
+Description
+Rex is a chatbot application built with React, Firebase, and the ChatGPT API. This application provides an interactive interface for users to chat with an AI-powered bot, offering a seamless and engaging experience.
 
 Features
-Real-time chat interface
-Chatbot responses powered by OpenAI's ChatGPT
-Typing indicator for a more realistic chat experience
+- Interactive chatbot interface
+- Firebase integration for authentication and data storage
+- Responsive design
+- Modern and clean UI
+
+Project Structure
+rex/
+├── app/
+│   ├── .eslintrc.cjs
+│   ├── .firebaserc
+│   ├── .git/
+│   ├── .gitignore
+│   ├── dist/
+│   ├── firebase.json
+│   ├── firestore.indexes.json
+│   ├── firestore.rules
+│   ├── index.html
+│   ├── node_modules/
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public/
+│   ├── README.md
+│   ├── src/
+│   ├── vite.config.js
+├── node_modules/
+├── package.json
+├── package-lock.json
+
 Getting Started
+
 Prerequisites
-Node.js
-npm (or yarn)
+- Node.js (v14.x or later)
+- npm (v6.x or later)
+  
 Installation
-Clone the repository:
-
-
-git clone https://github.com/coopercodes/ReactChatGPTChatbot.git
-cd ReactChatGPTChatbot
-Install dependencies:
-
-
-npm install
-Set up your OpenAI API key:
-
-Rename the .env.example file to .env.
-Add your OpenAI API key in the .env file:
-
-REACT_APP_OPENAI_API_KEY=your_openai_api_key_here
-Running the App
-Start the development server:
-
-
-npm start
-Open http://localhost:3000 to view the app in your browser.
+1. Clone the repository:
+   git clone git@github.com:sonaliks29/dashboard.git
+   cd rex/app
+2. Install dependencies:
+   npm install
+3. Set up Firebase:
+   Create a Firebase project on the Firebase Console.
+   Update the firebase.json, .firebaserc, and firestore.rules files with your Firebase project configuration.
+4. Run the application:
+   npm start
+5. Open your browser and navigate to http://localhost:3000 to see the application in action.
 
 Usage
-Type a message in the input field and press enter or click the send button.
-The chatbot will respond to your message, and you will see a typing indicator while it processes your input.
+- Click the 'Start Chat' button on the landing page to initiate a chat session with the chatbot.
+- Interact with the chatbot through the chat interface.
+- The chatbot responses are powered by the ChatGPT API, providing intelligent and context-aware replies.
 
+Deployment
+To deploy the application, you can use Firebase Hosting:
+1. Build the project:
+   npm run build
+2. Deploy to Firebase:
+   firebase deploy
 
-
+Acknowledgements
+React
+Firebase
+ChatGPT API
