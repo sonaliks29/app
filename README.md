@@ -66,6 +66,6 @@ To deploy the application, you can use Firebase Hosting:
    firebase deploy
 
 Acknowledgements:
-React
-Firebase
-ChatGPT API
+- React
+- Firebase
+- ChatGPT API
